@@ -11,6 +11,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/")
+def read_root():
+    return {"message": "Welcome to Tapputi Project API is running successfully!"}
+
 @app.get("/api/categories")
 def get_categories():
     return {
