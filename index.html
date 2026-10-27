@@ -244,7 +244,8 @@
             `;
 
             try {
-                const response = await fetch('http://127.0.0.1:8000/api/categories');
+                // استخدام مسار نسبي ليعمل تلقائياً مع السيرفر الحقيقي ومحلياً
+                const response = await fetch('/api/categories');
                 const data = await response.json();
                 const grid = document.getElementById('categories-grid');
                 grid.innerHTML = '';
