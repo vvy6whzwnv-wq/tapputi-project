@@ -1,5 +1,7 @@
 from fastapi import FastAPI
+from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
+import os
 
 app = FastAPI()
 
@@ -13,7 +15,7 @@ app.add_middleware(
 
 @app.get("/")
 def read_root():
-    return {"message": "Welcome to Tapputi Project API is running successfully!"}
+    return FileResponse("index.html")
 
 @app.get("/api/categories")
 def get_categories():
@@ -52,6 +54,5 @@ def get_categories():
 
 if __name__ == "__main__":
     import uvicorn
-    import os
     port = int(os.environ.get("PORT", 10000))
     uvicorn.run("main:app", host="0.0.0.0", port=port)
