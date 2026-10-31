@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>منصة تابوتي | Tapputi Platform</title>
   <style>
+    /* 1. المتغيرات والألوان الأساسية */
     :root {
       --bg-color: #0b132b;
       --card-bg: #1c2541;
@@ -16,23 +17,23 @@
       --bottom-nav-height: 60px;
     }
 
-    /* Light Theme Variant */
-    body.theme-light {
-      --bg-color: #f4f6f9;
-      --card-bg: #ffffff;
-      --accent-color: #2563eb;
-      --text-main: #1e293b;
-      --text-sub: #64748b;
-      --border-color: rgba(0, 0, 0, 0.1);
-    }
-
-    /* Dark Slate Theme Variant */
+    /* ثيم Slate */
     body.theme-slate {
       --bg-color: #0f172a;
       --card-bg: #1e293b;
       --accent-color: #38bdf8;
       --text-main: #f8fafc;
       --text-sub: #94a3b8;
+    }
+
+    /* الثيم الفاتح Light Mode */
+    body.theme-light {
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --accent-color: #2563eb;
+      --text-main: #0f172a;
+      --text-sub: #64748b;
+      --border-color: rgba(0, 0, 0, 0.1);
     }
 
     * {
@@ -45,15 +46,15 @@
     body {
       background-color: var(--bg-color);
       color: var(--text-main);
-      padding-top: var(--header-height);
-      padding-bottom: var(--bottom-nav-height);
+      padding-top: calc(var(--header-height) + 10px);
+      padding-bottom: calc(var(--bottom-nav-height) + 10px);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      transition: background-color 0.3s, color 0.3s;
+      transition: background-color 0.2s, color 0.2s;
     }
 
-    /* 1. الشريط العلوي الثابت (Fixed Top Header) */
+    /* 2. الشريط العلوي الثابت (Fixed Top Header) */
     .top-header {
       position: fixed;
       top: 0;
@@ -103,16 +104,16 @@
       background: transparent;
       border: 1px solid var(--border-color);
       color: var(--text-main);
-      padding: 6px 10px;
+      padding: 6px 12px;
       border-radius: 6px;
       cursor: pointer;
       font-size: 0.85rem;
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
     }
 
-    /* 2. الهيكل العام والـ Layout */
+    /* 3. الهيكل العام (Main Layout) */
     .app-wrapper {
       display: flex;
       flex: 1;
@@ -158,10 +159,10 @@
 
     .main-content {
       flex: 1;
-      padding: 20px;
+      padding: 15px 20px;
     }
 
-    /* قسم الإعدادات (حُلت مشكلة مفاتيح النصوص) */
+    /* 4. قسم الإعدادات المصلح (لا يحتوي على مفاتيح غريبة) */
     .settings-panel {
       background-color: var(--card-bg);
       border: 1px solid var(--border-color);
@@ -171,7 +172,7 @@
     }
 
     .settings-panel h2 {
-      font-size: 1.3rem;
+      font-size: 1.25rem;
       margin-bottom: 4px;
     }
 
@@ -190,6 +191,7 @@
       color: var(--text-sub);
       font-size: 0.9rem;
       margin-bottom: 10px;
+      font-weight: 600;
     }
 
     .radio-option {
@@ -206,6 +208,8 @@
 
     .radio-option input[type="radio"] {
       accent-color: var(--accent-color);
+      width: 16px;
+      height: 16px;
     }
 
     .version-row {
@@ -223,10 +227,20 @@
       color: var(--accent-color);
     }
 
-    /* الأقسام والبطاقات */
+    /* 5. قسم البطاقات والمحتوى */
     .welcome-hero {
       text-align: center;
       margin-bottom: 25px;
+    }
+
+    .welcome-hero h2 {
+      font-size: 1.6rem;
+      margin-bottom: 8px;
+    }
+
+    .welcome-hero p {
+      color: var(--text-sub);
+      font-size: 0.95rem;
     }
 
     .cards-grid {
@@ -250,9 +264,17 @@
     .card p {
       color: var(--text-sub);
       font-size: 0.88rem;
+      margin-bottom: 12px;
     }
 
-    /* 3. الشريط السفلي للموبايل */
+    .card-link {
+      color: var(--accent-color);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: bold;
+    }
+
+    /* 6. الشريط السفلي للموبايل (Bottom Nav) مع تصحيح زر العربة */
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -282,13 +304,18 @@
       color: var(--accent-color);
     }
 
+    .nav-icon {
+      font-size: 1.2rem;
+    }
+
     .cart-badge {
       position: absolute;
-      top: -2px;
-      right: -8px;
+      top: -4px;
+      right: -10px;
       background: var(--accent-color);
       color: white;
       font-size: 0.65rem;
+      font-weight: bold;
       width: 16px;
       height: 16px;
       border-radius: 50%;
@@ -297,6 +324,7 @@
       justify-content: center;
     }
 
+    /* ضبط الديسكتوب */
     @media (min-width: 768px) {
       body {
         padding-bottom: 0;
@@ -319,11 +347,11 @@
   <header class="top-header">
     <div class="header-brand">
       <span class="logo-icon">T</span>
-      <span class="app-title" id="txt-app-title">منصة تابوتي</span>
+      <span class="app-title" id="lbl-app-title">منصة تابوتي</span>
     </div>
     
     <div class="header-actions">
-      <button class="btn-icon" id="toggleSettingsBtn">⚙️ <span id="txt-settings-btn">الإعدادات</span></button>
+      <button class="btn-icon" id="toggleSettingsBtn">⚙️ <span id="lbl-settings-btn">الإعدادات</span></button>
     </div>
   </header>
 
@@ -331,22 +359,22 @@
     
     <!-- القائمة الجانبية (ديسكتوب) -->
     <aside class="sidebar">
-      <button class="sidebar-btn active" id="txt-side-home">🏠 الواجهة والأقسام</button>
-      <button class="sidebar-btn" id="txt-side-cart">🛒 عربة التسوق</button>
-      <button class="sidebar-btn" id="txt-side-chat">💬 Chat Tapputi</button>
+      <button class="sidebar-btn active" id="side-home">🏠 الواجهة والأقسام</button>
+      <button class="sidebar-btn" id="side-cart">🛒 عربة التسوق</button>
+      <button class="sidebar-btn" id="side-chat">💬 Chat Tapputi</button>
     </aside>
 
-    <!-- منطقة المحتوى -->
+    <!-- منطقة المحتوى الرئيسية -->
     <main class="main-content">
 
-      <!-- لوحة الإعدادات (تظهر عند الضغط أو تفعيلها) -->
+      <!-- قسم الإعدادات -->
       <section class="settings-panel" id="settingsPanel">
-        <h2 id="txt-settings-title">إعدادات المنصة</h2>
-        <p class="desc" id="txt-settings-desc">قم بتخصيص لغة التطبيق والمظهر المناسب لك.</p>
+        <h2 id="lbl-settings-title">إعدادات المنصة</h2>
+        <p class="desc" id="lbl-settings-desc">قم بتخصيص لغة التطبيق والمظهر المناسب لك.</p>
 
-        <!-- تغيير اللغة -->
+        <!-- اختياري اللغة -->
         <div class="setting-group">
-          <span class="setting-label" id="txt-lang-label">لغة التطبيق</span>
+          <span class="setting-label" id="lbl-lang">لغة التطبيق</span>
           <label class="radio-option">
             <input type="radio" name="language" value="ar" checked>
             <span>العربية (Arabic)</span>
@@ -357,9 +385,9 @@
           </label>
         </div>
 
-        <!-- تغيير الثيم -->
+        <!-- اختياري الثيم -->
         <div class="setting-group">
-          <span class="setting-label" id="txt-theme-label">المظهر والثيمات</span>
+          <span class="setting-label" id="lbl-theme">المظهر والثيمات</span>
           <label class="radio-option">
             <input type="radio" name="theme" value="royal" checked>
             <span>Royal Blue</span>
@@ -376,25 +404,37 @@
 
         <!-- إصدار التطبيق -->
         <div class="version-row">
-          <span id="txt-version-label">إصدار التطبيق</span>
+          <span id="lbl-version">إصدار التطبيق</span>
           <span class="version-val">v1.0.0</span>
         </div>
       </section>
 
       <!-- الأقسام والتصنيفات -->
       <div class="welcome-hero">
-        <h2 id="txt-hero-title">مرحبًا بكم في منصة تابوتي!</h2>
-        <p id="txt-hero-desc">العناية المبنية على المشكلة والموجهة بأحدث المعايير العلمية.</p>
+        <h2 id="lbl-hero-title">مرحبًا بكم في منصة تابوتي!</h2>
+        <p id="lbl-hero-desc">العناية المبنية على المشكلة والموجهة بأحدث المعايير العلمية.</p>
       </div>
 
       <div class="cards-grid">
         <div class="card">
-          <h3 id="txt-c1-t">حب الشباب والبثور</h3>
-          <p id="txt-c1-d">تنظيم إفراز الدهون وتقليل التهابات البشرة.</p>
+          <h3 id="lbl-c1-t">حب الشباب والبثور</h3>
+          <p id="lbl-c1-d">تنظيم إفراز الدهون وتقليل التهابات البشرة.</p>
+          <a href="#" class="card-link" id="lbl-c1-l">استكشف المحتوى &larr;</a>
         </div>
         <div class="card">
-          <h3 id="txt-c2-t">التصبغات وآثار الحبوب</h3>
-          <p id="txt-c2-d">توحيد لون البشرة وإزالة التصبغات بالمكونات الفعالة.</p>
+          <h3 id="lbl-c2-t">التصبغات وآثار الحبوب</h3>
+          <p id="lbl-c2-d">توحيد لون البشرة وإزالة التصبغات بالمكونات الفعالة.</p>
+          <a href="#" class="card-link" id="lbl-c2-l">استكشف المحتوى &larr;</a>
+        </div>
+        <div class="card">
+          <h3 id="lbl-c3-t">تضرر حاجز البشرة</h3>
+          <p id="lbl-c3-d">إصلاح وترطيب وحماية طبقات الجلد الحيوية.</p>
+          <a href="#" class="card-link" id="lbl-c3-l">استكشف المحتوى &larr;</a>
+        </div>
+        <div class="card">
+          <h3 id="lbl-c4-t">تساقط الشعر وفروة الرأس</h3>
+          <p id="lbl-c4-d">تحفيز بصيلات الشعر وعلاج مشاكل فروة الرأس.</p>
+          <a href="#" class="card-link" id="lbl-c4-l">استكشف المحتوى &larr;</a>
         </div>
       </div>
 
@@ -405,96 +445,97 @@
   <nav class="bottom-nav">
     <a href="#" class="nav-item active">
       <span class="nav-icon">🏠</span>
-      <span id="txt-nav-home">الواجهة والأقسام</span>
+      <span id="nav-home">الواجهة والأقسام</span>
     </a>
     <a href="#" class="nav-item">
       <span class="nav-icon">🛒</span>
-      <span id="txt-nav-cart">عربة التسوق</span>
+      <span id="nav-cart">عربة التسوق</span>
       <span class="cart-badge">0</span>
     </a>
     <a href="#" class="nav-item">
       <span class="nav-icon">💬</span>
-      <span id="txt-nav-chat">Chat Tapputi</span>
+      <span id="nav-chat">Chat Tapputi</span>
     </a>
   </nav>
 
-  <!-- قاموس الترجمة التفاعلي لحل مشكلة المفاتيح الظاهرة -->
+  <!-- برمجة الثيمات والترجمة السريعة الخالية من الأخطاء -->
   <script>
-    const translations = {
+    const i18n = {
       ar: {
         appTitle: "منصة تابوتي",
         settingsBtn: "الإعدادات",
         settingsTitle: "إعدادات المنصة",
         settingsDesc: "قم بتخصيص لغة التطبيق والمظهر المناسب لك.",
-        langLabel: "لغة التطبيق",
-        themeLabel: "المظهر والثيمات",
-        versionLabel: "إصدار التطبيق",
-        navHome: "الواجهة والأقسام",
-        navCart: "عربة التسوق",
-        navChat: "Chat Tapputi",
+        lang: "لغة التطبيق",
+        theme: "المظهر والثيمات",
+        version: "إصدار التطبيق",
+        home: "الواجهة والأقسام",
+        cart: "عربة التسوق",
+        chat: "Chat Tapputi",
         heroTitle: "مرحبًا بكم في منصة تابوتي!",
         heroDesc: "العناية المبنية على المشكلة والموجهة بأحدث المعايير العلمية.",
-        c1t: "حب الشباب والبثور",
-        c1d: "تنظيم إفراز الدهون وتقليل التهابات البشرة.",
-        c2t: "التصبغات وآثار الحبوب",
-        c2d: "توحيد لون البشرة وإزالة التصبغات بالمكونات الفعالة."
+        c1t: "حب الشباب والبثور", c1d: "تنظيم إفراز الدهون وتقليل التهابات البشرة.",
+        c2t: "التصبغات وآثار الحبوب", c2d: "توحيد لون البشرة وإزالة التصبغات بالمكونات الفعالة.",
+        c3t: "تضرر حاجز البشرة", c3d: "إصلاح وترطيب وحماية طبقات الجلد الحيوية.",
+        c4t: "تساقط الشعر وفروة الرأس", c4d: "تحفيز بصيلات الشعر وعلاج مشاكل فروة الرأس.",
+        link: "استكشف المحتوى ←"
       },
       en: {
         appTitle: "Tapputi Platform",
         settingsBtn: "Settings",
         settingsTitle: "Platform Settings",
         settingsDesc: "Customize application language and appearance.",
-        langLabel: "Application Language",
-        themeLabel: "Appearance & Themes",
-        versionLabel: "App Version",
-        navHome: "Interface & Categories",
-        navCart: "Shopping Cart",
-        navChat: "Chat Tapputi",
+        lang: "App Language",
+        theme: "Appearance & Themes",
+        version: "App Version",
+        home: "Interface & Categories",
+        cart: "Shopping Cart",
+        chat: "Chat Tapputi",
         heroTitle: "Welcome to Tapputi Platform!",
         heroDesc: "Problem-based care guided by the latest scientific standards.",
-        c1t: "Acne & Blemishes",
-        c1d: "Regulating sebum production and reducing skin inflammation.",
-        c2t: "Hyperpigmentation & Acne Scars",
-        c2d: "Even skin tone and reduce pigmentation with active ingredients."
+        c1t: "Acne & Blemishes", c1d: "Regulating sebum production and reducing skin inflammation.",
+        c2t: "Hyperpigmentation & Scars", c2d: "Even skin tone and reduce pigmentation with active ingredients.",
+        c3t: "Damaged Skin Barrier", c3d: "Repair, hydrate, and protect vital skin layers.",
+        c4t: "Hair Loss & Scalp", c4d: "Stimulate hair follicles and treat scalp issues.",
+        link: "Explore Content →"
       }
     };
 
-    function updateLanguage(lang) {
+    function applyLanguage(lang) {
       document.documentElement.lang = lang;
       document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
       
-      const t = translations[lang];
-      document.getElementById('txt-app-title').textContent = t.appTitle;
-      document.getElementById('txt-settings-btn').textContent = t.settingsBtn;
-      document.getElementById('txt-settings-title').textContent = t.settingsTitle;
-      document.getElementById('txt-settings-desc').textContent = t.settingsDesc;
-      document.getElementById('txt-lang-label').textContent = t.langLabel;
-      document.getElementById('txt-theme-label').textContent = t.themeLabel;
-      document.getElementById('txt-version-label').textContent = t.versionLabel;
-      
-      document.getElementById('txt-nav-home').textContent = t.navHome;
-      document.getElementById('txt-nav-cart').textContent = t.navCart;
-      document.getElementById('txt-nav-chat').textContent = t.navChat;
-      document.getElementById('txt-side-home').textContent = "🏠 " + t.navHome;
-      document.getElementById('txt-side-cart').textContent = "🛒 " + t.navCart;
-      document.getElementById('txt-side-chat').textContent = "💬 " + t.navChat;
+      const t = i18n[lang];
+      document.getElementById('lbl-app-title').textContent = t.appTitle;
+      document.getElementById('lbl-settings-btn').textContent = t.settingsBtn;
+      document.getElementById('lbl-settings-title').textContent = t.settingsTitle;
+      document.getElementById('lbl-settings-desc').textContent = t.settingsDesc;
+      document.getElementById('lbl-lang').textContent = t.lang;
+      document.getElementById('lbl-theme').textContent = t.theme;
+      document.getElementById('lbl-version').textContent = t.version;
 
-      document.getElementById('txt-hero-title').textContent = t.heroTitle;
-      document.getElementById('txt-hero-desc').textContent = t.heroDesc;
-      document.getElementById('txt-c1-t').textContent = t.c1t;
-      document.getElementById('txt-c1-d').textContent = t.c1d;
-      document.getElementById('txt-c2-t').textContent = t.c2t;
-      document.getElementById('txt-c2-d').textContent = t.c2d;
+      document.getElementById('nav-home').textContent = t.home;
+      document.getElementById('nav-cart').textContent = t.cart;
+      document.getElementById('nav-chat').textContent = t.chat;
+      document.getElementById('side-home').textContent = "🏠 " + t.home;
+      document.getElementById('side-cart').textContent = "🛒 " + t.cart;
+      document.getElementById('side-chat').textContent = "💬 " + t.chat;
+
+      document.getElementById('lbl-hero-title').textContent = t.heroTitle;
+      document.getElementById('lbl-hero-desc').textContent = t.heroDesc;
+
+      document.getElementById('lbl-c1-t').textContent = t.c1t; document.getElementById('lbl-c1-d').textContent = t.c1d; document.getElementById('lbl-c1-l').textContent = t.link;
+      document.getElementById('lbl-c2-t').textContent = t.c2t; document.getElementById('lbl-c2-d').textContent = t.c2d; document.getElementById('lbl-c2-l').textContent = t.link;
+      document.getElementById('lbl-c3-t').textContent = t.c3t; document.getElementById('lbl-c3-d').textContent = t.c3d; document.getElementById('lbl-c3-l').textContent = t.link;
+      document.getElementById('lbl-c4-t').textContent = t.c4t; document.getElementById('lbl-c4-d').textContent = t.c4d; document.getElementById('lbl-c4-l').textContent = t.link;
     }
 
-    // تفعيل تغيير اللغة عبر الـ Radio Buttons
+    // استجابة خيارات اللغة
     document.querySelectorAll('input[name="language"]').forEach(radio => {
-      radio.addEventListener('change', (e) => {
-        updateLanguage(e.target.value);
-      });
+      radio.addEventListener('change', (e) => applyLanguage(e.target.value));
     });
 
-    // تفعيل تغيير الثيمات
+    // استجابة تغيير الثيمات
     document.querySelectorAll('input[name="theme"]').forEach(radio => {
       radio.addEventListener('change', (e) => {
         document.body.className = '';
