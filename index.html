@@ -47,7 +47,7 @@
 </head>
 <body class="min-h-screen flex flex-col md:flex-row theme-royal-blue pb-24 md:pb-0 pt-14 md:pt-0" id="body-element">
 
-    <!-- 1. الهيدر العلوي الخاص بالموبايل فقط (يحتوي أيقونات SVG دقيقة للإعدادات ومن نحن) -->
+    <!-- 1. الهيدر العلوي الخاص بالموبايل فقط -->
     <header class="md:hidden fixed top-0 left-0 right-0 h-14 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 px-4 flex items-center justify-between z-50">
         <div class="flex items-center gap-2 cursor-pointer" onclick="switchView('categories')">
             <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center font-bold text-white text-sm shadow-md">
@@ -56,11 +56,11 @@
             <span class="font-bold text-sm text-slate-100">منصة تابوتي</span>
         </div>
         <div class="flex items-center gap-1">
-            <!-- زر الإعدادات للموبايل بأيقونة SVG -->
+            <!-- زر الإعدادات للموبايل -->
             <button onclick="switchView('settings')" id="mob-top-settings" class="p-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition cursor-pointer" title="الإعدادات">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
             </button>
-            <!-- زر من نحن (علامة السؤال) للموبايل بأيقونة SVG -->
+            <!-- زر من نحن للموبايل -->
             <button onclick="switchView('about')" id="mob-top-about" class="p-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition cursor-pointer" title="من نحن">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             </button>
@@ -90,7 +90,7 @@
         </div>
     </main>
 
-    <!-- 2. الشريط الجانبي للدسكتوب والتابلت (md:flex) -->
+    <!-- 2. الشريط الجانبي للدسكتوب والتابلت -->
     <aside id="sidebar-element" class="hidden md:flex w-72 bg-slate-900 border-r border-slate-800 p-6 flex-col justify-between shrink-0 order-last">
         <div>
             <div class="flex items-center gap-3 mb-8 pb-4 border-b border-slate-800">
@@ -142,7 +142,7 @@
         </div>
     </aside>
 
-    <!-- 3. الشريط السفلي للموبايل فقط (md:hidden) -->
+    <!-- 3. الشريط السفلي للموبايل فقط -->
     <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-slate-900 border-t border-slate-800 flex justify-around items-center py-2 px-4 z-50 shadow-2xl backdrop-blur-md bg-opacity-95">
         <button onclick="switchView('categories')" id="mob-nav-categories" class="flex flex-col items-center justify-center p-2 text-blue-500 text-xs font-semibold transition cursor-pointer">
             <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
@@ -282,12 +282,14 @@
                 }
             });
 
+            // استدعاء الوجهة الصحيحة بناءً على اختيار المستخدم (تمت إضافة settings هنا)
             if (viewName === 'categories') loadCategoriesView();
             else if (viewName === 'cart') loadCartView();
             else if (viewName === 'chat') loadChatView();
             else if (viewName === 'about') loadAboutView();
             else if (viewName === 'lang') loadLangView();
             else if (viewName === 'theme') loadThemeView();
+            else if (viewName === 'settings') loadSettingsView();
         }
 
         async function loadCategoriesView() {
@@ -428,73 +430,70 @@
             `;
         }
 
-        function loadLangView() {
+        // دالة الإعدادات الشاملة (لغة وثيمات وإصدار)
+        function loadSettingsView() {
             const container = document.getElementById('dynamic-content');
             container.innerHTML = `
                 <div class="card-theme p-8 rounded-2xl max-w-xl mx-auto mt-6">
-                    <h2 class="text-2xl font-bold mb-2">${t('lang_title')}</h2>
-                    <p class="text-slate-400 text-sm mb-6">${t('lang_desc')}</p>
+                    <h2 class="text-2xl font-bold mb-2">${t('settings_title')}</h2>
+                    <p class="text-slate-400 text-sm mb-6">${t('settings_desc')}</p>
                     
-                    <div class="space-y-3 mb-6">
-                        <label class="flex items-center gap-3 p-4 rounded-xl card-theme cursor-pointer">
-                            <input type="radio" name="lang-select" value="ar" ${currentLang === 'ar' ? 'checked' : ''} class="w-4 h-4 text-blue-600">
-                            <span class="font-semibold">العربية (Arabic)</span>
-                        </label>
-                        <label class="flex items-center gap-3 p-4 rounded-xl card-theme cursor-pointer">
-                            <input type="radio" name="lang-select" value="en" ${currentLang === 'en' ? 'checked' : ''} class="w-4 h-4 text-blue-600">
-                            <span class="font-semibold">English (الإنجليزية)</span>
-                        </label>
+                    <!-- إعدادات اللغة -->
+                    <div class="mb-6 pb-6 border-b border-slate-700/50">
+                        <label class="block text-sm font-semibold mb-3 text-blue-400">${t('lang_label')}</label>
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-3 p-3 rounded-xl card-theme cursor-pointer">
+                                <input type="radio" name="lang-select" value="ar" ${currentLang === 'ar' ? 'checked' : ''} class="w-4 h-4 text-blue-600">
+                                <span class="font-semibold text-sm">العربية (Arabic)</span>
+                            </label>
+                            <label class="flex items-center gap-3 p-3 rounded-xl card-theme cursor-pointer">
+                                <input type="radio" name="lang-select" value="en" ${currentLang === 'en' ? 'checked' : ''} class="w-4 h-4 text-blue-600">
+                                <span class="font-semibold text-sm">English (الإنجليزية)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- إعدادات الثيمات -->
+                    <div class="mb-6 pb-6 border-b border-slate-700/50">
+                        <label class="block text-sm font-semibold mb-3 text-blue-400">${t('theme_label')}</label>
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-3 p-3 rounded-xl card-theme cursor-pointer">
+                                <input type="radio" name="theme-select" value="theme-royal-blue" ${currentTheme === 'theme-royal-blue' ? 'checked' : ''} class="w-4 h-4 text-blue-600">
+                                <span class="font-semibold text-sm">${t('theme_1')}</span>
+                            </label>
+                            <label class="flex items-center gap-3 p-3 rounded-xl card-theme cursor-pointer">
+                                <input type="radio" name="theme-select" value="theme-dark-slate" ${currentTheme === 'theme-dark-slate' ? 'checked' : ''} class="w-4 h-4 text-blue-600">
+                                <span class="font-semibold text-sm">${t('theme_2')}</span>
+                            </label>
+                            <label class="flex items-center gap-3 p-3 rounded-xl card-theme cursor-pointer">
+                                <input type="radio" name="theme-select" value="theme-light" ${currentTheme === 'theme-light' ? 'checked' : ''} class="w-4 h-4 text-blue-600">
+                                <span class="font-semibold text-sm">${t('theme_3')}</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- رقم الإصدار -->
+                    <div class="mb-6 flex items-center justify-between p-3 rounded-xl bg-slate-900/30 border border-slate-700/40 text-sm">
+                        <span class="text-slate-400">${t('version_label')}</span>
+                        <span class="font-bold text-blue-400">${t('version_val')}</span>
                     </div>
                     
-                    <button onclick="applyLanguage()" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition cursor-pointer shadow-lg shadow-blue-600/30">
+                    <button onclick="applySettings()" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition cursor-pointer shadow-lg shadow-blue-600/30">
                         ${t('apply')}
                     </button>
                 </div>
             `;
         }
 
-        function applyLanguage() {
-            const selected = document.querySelector('input[name="lang-select"]:checked');
-            if (selected) {
-                currentLang = selected.value;
-                updateStaticTexts();
-                switchView(currentView);
+        function applySettings() {
+            const selectedLang = document.querySelector('input[name="lang-select"]:checked');
+            if (selectedLang) {
+                currentLang = selectedLang.value;
             }
-        }
 
-        function loadThemeView() {
-            const container = document.getElementById('dynamic-content');
-            container.innerHTML = `
-                <div class="card-theme p-8 rounded-2xl max-w-xl mx-auto mt-6">
-                    <h2 class="text-2xl font-bold mb-2">${t('theme_title')}</h2>
-                    <p class="text-slate-400 text-sm mb-6">${t('theme_desc')}</p>
-                    
-                    <div class="space-y-3 mb-6">
-                        <label class="flex items-center gap-3 p-4 rounded-xl card-theme cursor-pointer">
-                            <input type="radio" name="theme-select" value="theme-royal-blue" ${currentTheme === 'theme-royal-blue' ? 'checked' : ''} class="w-4 h-4 text-blue-600">
-                            <span class="font-semibold">${t('theme_1')}</span>
-                        </label>
-                        <label class="flex items-center gap-3 p-4 rounded-xl card-theme cursor-pointer">
-                            <input type="radio" name="theme-select" value="theme-dark-slate" ${currentTheme === 'theme-dark-slate' ? 'checked' : ''} class="w-4 h-4 text-blue-600">
-                            <span class="font-semibold">${t('theme_2')}</span>
-                        </label>
-                        <label class="flex items-center gap-3 p-4 rounded-xl card-theme cursor-pointer">
-                            <input type="radio" name="theme-select" value="theme-light" ${currentTheme === 'theme-light' ? 'checked' : ''} class="w-4 h-4 text-blue-600">
-                            <span class="font-semibold">${t('theme_3')}</span>
-                        </label>
-                    </div>
-                    
-                    <button onclick="applyTheme()" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition cursor-pointer shadow-lg shadow-blue-600/30">
-                        ${t('apply')}
-                    </button>
-                </div>
-            `;
-        }
-
-        function applyTheme() {
-            const selected = document.querySelector('input[name="theme-select"]:checked');
-            if (selected) {
-                currentTheme = selected.value;
+            const selectedTheme = document.querySelector('input[name="theme-select"]:checked');
+            if (selectedTheme) {
+                currentTheme = selectedTheme.value;
                 const body = document.getElementById('body-element');
                 body.className = `min-h-screen flex flex-col md:flex-row ${currentTheme} pb-24 md:pb-0 pt-14 md:pt-0`;
                 
@@ -509,6 +508,9 @@
                     }
                 }
             }
+
+            updateStaticTexts();
+            switchView(currentView);
         }
 
         updateStaticTexts();
@@ -516,3 +518,4 @@
     </script>
 </body>
 </html>
+
