@@ -1,548 +1,513 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" id="html-root">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>منصة تابوتي | Tapputi Platform</title>
-  <style>
-    /* 1. المتغيرات والألوان الأساسية */
-    :root {
-      --bg-color: #0b132b;
-      --card-bg: #1c2541;
-      --accent-color: #3a86ff;
-      --text-main: #ffffff;
-      --text-sub: #8d99ae;
-      --border-color: rgba(255, 255, 255, 0.1);
-      --header-height: 60px;
-      --bottom-nav-height: 60px;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة تابوتي - Tapputi Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Cairo', sans-serif; 
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        /* الثيمات المختلفة */
+        body.theme-royal-blue { background-color: #0f172a; color: #f8fafc; }
+        body.theme-dark-slate { background-color: #090d16; color: #f1f5f9; }
+        body.theme-light { background-color: #f8fafc; color: #0f172a; }
 
-    /* ثيم Slate */
-    body.theme-slate {
-      --bg-color: #0f172a;
-      --card-bg: #1e293b;
-      --accent-color: #38bdf8;
-      --text-main: #f8fafc;
-      --text-sub: #94a3b8;
-    }
+        .card-theme {
+            transition: all 0.3s ease;
+        }
+        body.theme-light .card-theme {
+            background: #ffffff;
+            border-color: #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+        body.theme-light .card-theme:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.15);
+        }
+        body:not(.theme-light) .card-theme {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        body:not(.theme-light) .card-theme:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.15);
+        }
 
-    /* الثيم الفاتح Light Mode */
-    body.theme-light {
-      --bg-color: #f8fafc;
-      --card-bg: #ffffff;
-      --accent-color: #2563eb;
-      --text-main: #0f172a;
-      --text-sub: #64748b;
-      --border-color: rgba(0, 0, 0, 0.1);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    }
-
-    body {
-      background-color: var(--bg-color);
-      color: var(--text-main);
-      padding-top: calc(var(--header-height) + 10px);
-      padding-bottom: calc(var(--bottom-nav-height) + 10px);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      transition: background-color 0.2s, color 0.2s;
-    }
-
-    /* 2. الشريط العلوي الثابت (Fixed Top Header) */
-    .top-header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: var(--header-height);
-      background-color: var(--bg-color);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 16px;
-      z-index: 1000;
-      border-bottom: 1px solid var(--border-color);
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-    }
-
-    .header-brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .logo-icon {
-      background-color: var(--accent-color);
-      color: #ffffff;
-      font-weight: bold;
-      width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 8px;
-    }
-
-    .app-title {
-      font-size: 1.1rem;
-      font-weight: bold;
-    }
-
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .btn-icon {
-      background: transparent;
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
-      padding: 6px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.85rem;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    /* 3. الهيكل العام (Main Layout) */
-    .app-wrapper {
-      display: flex;
-      flex: 1;
-      max-width: 1200px;
-      width: 100%;
-      margin: 0 auto;
-    }
-
-    /* القائمة الجانبية للديسكتوب */
-    .sidebar {
-      width: 250px;
-      padding: 20px 15px;
-      display: none;
-      flex-direction: column;
-      gap: 8px;
-      border-left: 1px solid var(--border-color);
-    }
-
-    html[dir="ltr"] .sidebar {
-      border-left: none;
-      border-right: 1px solid var(--border-color);
-    }
-
-    .sidebar-btn {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 16px;
-      background: transparent;
-      color: var(--text-main);
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 0.95rem;
-      width: 100%;
-      text-align: inherit;
-    }
-
-    .sidebar-btn.active, .sidebar-btn:hover {
-      background-color: var(--accent-color);
-      color: #ffffff;
-    }
-
-    .main-content {
-      flex: 1;
-      padding: 15px 20px;
-    }
-
-    /* 4. قسم الإعدادات المصلح (لا يحتوي على مفاتيح غريبة) */
-    .settings-panel {
-      background-color: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 25px;
-    }
-
-    .settings-panel h2 {
-      font-size: 1.25rem;
-      margin-bottom: 4px;
-    }
-
-    .settings-panel p.desc {
-      color: var(--text-sub);
-      font-size: 0.85rem;
-      margin-bottom: 20px;
-    }
-
-    .setting-group {
-      margin-bottom: 20px;
-    }
-
-    .setting-label {
-      display: block;
-      color: var(--text-sub);
-      font-size: 0.9rem;
-      margin-bottom: 10px;
-      font-weight: 600;
-    }
-
-    .radio-option {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 16px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      margin-bottom: 8px;
-      cursor: pointer;
-    }
-
-    .radio-option input[type="radio"] {
-      accent-color: var(--accent-color);
-      width: 16px;
-      height: 16px;
-    }
-
-    .version-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-top: 15px;
-      border-top: 1px solid var(--border-color);
-      color: var(--text-sub);
-      font-size: 0.85rem;
-    }
-
-    .version-val {
-      font-weight: bold;
-      color: var(--accent-color);
-    }
-
-    /* 5. قسم البطاقات والمحتوى */
-    .welcome-hero {
-      text-align: center;
-      margin-bottom: 25px;
-    }
-
-    .welcome-hero h2 {
-      font-size: 1.6rem;
-      margin-bottom: 8px;
-    }
-
-    .welcome-hero p {
-      color: var(--text-sub);
-      font-size: 0.95rem;
-    }
-
-    .cards-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 15px;
-    }
-
-    .card {
-      background-color: var(--card-bg);
-      padding: 20px;
-      border-radius: 12px;
-      border: 1px solid var(--border-color);
-    }
-
-    .card h3 {
-      font-size: 1.1rem;
-      margin-bottom: 8px;
-    }
-
-    .card p {
-      color: var(--text-sub);
-      font-size: 0.88rem;
-      margin-bottom: 12px;
-    }
-
-    .card-link {
-      color: var(--accent-color);
-      text-decoration: none;
-      font-size: 0.85rem;
-      font-weight: bold;
-    }
-
-    /* 6. الشريط السفلي للموبايل (Bottom Nav) مع تصحيح زر العربة */
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: var(--bottom-nav-height);
-      background-color: var(--bg-color);
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      border-top: 1px solid var(--border-color);
-      z-index: 1000;
-    }
-
-    .nav-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      color: var(--text-sub);
-      text-decoration: none;
-      font-size: 0.75rem;
-      gap: 4px;
-      position: relative;
-    }
-
-    .nav-item.active {
-      color: var(--accent-color);
-    }
-
-    .nav-icon {
-      font-size: 1.2rem;
-    }
-
-    .cart-badge {
-      position: absolute;
-      top: -4px;
-      right: -10px;
-      background: var(--accent-color);
-      color: white;
-      font-size: 0.65rem;
-      font-weight: bold;
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* ضبط الديسكتوب */
-    @media (min-width: 768px) {
-      body {
-        padding-bottom: 0;
-      }
-      .sidebar {
-        display: flex;
-      }
-      .bottom-nav {
-        display: none;
-      }
-      .cards-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-  </style>
+        @keyframes bounceSlow {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+        .welcome-bounce { animation: bounceSlow 3s ease-in-out infinite; }
+    </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col md:flex-row theme-royal-blue pb-24 md:pb-0 pt-14 md:pt-0" id="body-element">
 
-  <!-- الشريط العلوي الثابت -->
-  <header class="top-header">
-    <div class="header-brand">
-      <span class="logo-icon">T</span>
-      <span class="app-title" id="lbl-app-title">منصة تابوتي</span>
-    </div>
-    
-    <div class="header-actions">
-      <button class="btn-icon" id="toggleSettingsBtn">⚙️ <span id="lbl-settings-btn">الإعدادات</span></button>
-    </div>
-  </header>
+    <!-- 1. الهيدر العلوي الخاص بالموبايل فقط (ثابت تماماً ولا يتحرك مع التمرير) -->
+    <header class="md:hidden fixed top-0 left-0 right-0 h-14 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 px-4 flex items-center justify-between z-50">
+        <div class="flex items-center gap-2 cursor-pointer" onclick="switchView('categories')">
+            <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center font-bold text-white text-sm shadow-md">
+                T
+            </div>
+            <span class="font-bold text-sm text-slate-100">منصة تابوتي</span>
+        </div>
+        <div class="flex items-center gap-1">
+            <!-- زر الإعدادات للموبايل -->
+            <button onclick="switchView('settings')" id="mob-top-settings" class="p-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition cursor-pointer" title="الإعدادات">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            </button>
+            <!-- زر من نحن للموبايل -->
+            <button onclick="switchView('about')" id="mob-top-about" class="p-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition cursor-pointer" title="من نحن">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </button>
+        </div>
+    </header>
 
-  <div class="app-wrapper">
-    
-    <!-- القائمة الجانبية (ديسكتوب) -->
-    <aside class="sidebar">
-      <button class="sidebar-btn active" id="side-home">🏠 الواجهة والأقسام</button>
-      <button class="sidebar-btn" id="side-cart">🛒 عربة التسوق</button>
-      <button class="sidebar-btn" id="side-chat">💬 Chat Tapputi</button>
+    <!-- محتوى الشاشة الرئيسي -->
+    <main class="flex-1 p-6 md:p-12 overflow-y-auto">
+        <div class="max-w-4xl mx-auto">
+            
+            <!-- الهيدر الترحيبي -->
+            <header class="text-center my-8 welcome-bounce">
+                <span id="badge-text" class="inline-block px-3 py-1 text-xs font-semibold tracking-wider text-blue-400 bg-blue-950/60 border border-blue-800/50 rounded-full mb-3">
+                    منصة تابوتي الذكية
+                </span>
+                <h1 id="welcome-title" class="text-3xl md:text-5xl font-extrabold tracking-tight text-blue-500 mb-3">
+                    مرحبًا بكم في منصة تابوتي!
+                </h1>
+                <p id="welcome-desc" class="text-slate-400 text-sm md:text-base max-w-xl mx-auto">
+                    العناية المبنية على المشكلة والموجهة بأحدث المعايير العلمية.
+                </p>
+            </header>
+
+            <!-- منطقة العرض الديناميكية -->
+            <div id="dynamic-content"></div>
+
+        </div>
+    </main>
+
+    <!-- 2. الشريط الجانبي للدسكتوب والتابلت -->
+    <aside id="sidebar-element" class="hidden md:flex w-72 bg-slate-900 border-r border-slate-800 p-6 flex-col justify-between shrink-0 order-last">
+        <div>
+            <div class="flex items-center gap-3 mb-8 pb-4 border-b border-slate-800">
+                <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center font-bold text-white text-lg shadow-lg shadow-blue-500/30">
+                    T
+                </div>
+                <div>
+                    <h2 id="sidebar-title" class="font-bold text-slate-100 text-base">منصة تابوتي</h2>
+                    <p class="text-xs text-blue-400">Tapputi Platform</p>
+                </div>
+            </div>
+
+            <!-- أزرار التنقل الرئيسية للدسكتوب -->
+            <nav class="space-y-2">
+                <button onclick="switchView('categories')" id="nav-categories" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition bg-blue-600 text-white shadow-lg shadow-blue-600/25 cursor-pointer">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-16zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-16z"/></svg>
+                    <span data-i18n="nav_categories">الواجهة والأقسام</span>
+                </button>
+
+                <button onclick="switchView('cart')" id="nav-cart" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition text-slate-400 hover:bg-slate-800 hover:text-slate-200 cursor-pointer">
+                    <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                    <span data-i18n="nav_cart">عربة التسوق</span>
+                </button>
+
+                <button onclick="switchView('chat')" id="nav-chat" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition text-slate-400 hover:bg-slate-800 hover:text-slate-200 cursor-pointer">
+                    <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+                    <span data-i18n="nav_chat">Chat Tapputi</span>
+                </button>
+
+                <button onclick="switchView('about')" id="nav-about" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition text-slate-400 hover:bg-slate-800 hover:text-slate-200 cursor-pointer">
+                    <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <span data-i18n="nav_about">من نحن</span>
+                </button>
+
+                <button onclick="switchView('settings')" id="nav-settings" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition text-slate-400 hover:bg-slate-800 hover:text-slate-200 cursor-pointer">
+                    <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    <span data-i18n="nav_settings">الإعدادات</span>
+                </button>
+            </nav>
+        </div>
+
+        <div class="pt-6 border-t border-slate-800 text-xs text-slate-500 text-center">
+            Tapputi Platform © 2026
+        </div>
     </aside>
 
-    <!-- منطقة المحتوى الرئيسية -->
-    <main class="main-content">
+    <!-- 3. الشريط السفلي للموبايل فقط -->
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-slate-900 border-t border-slate-800 flex justify-around items-center py-2 px-4 z-50 shadow-2xl backdrop-blur-md bg-opacity-95">
+        <button onclick="switchView('categories')" id="mob-nav-categories" class="flex flex-col items-center justify-center p-2 text-blue-500 text-xs font-semibold transition cursor-pointer">
+            <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+            <span data-i18n="nav_categories">الرئيسية</span>
+        </button>
 
-      <!-- قسم الإعدادات -->
-      <section class="settings-panel" id="settingsPanel">
-        <h2 id="lbl-settings-title">إعدادات المنصة</h2>
-        <p class="desc" id="lbl-settings-desc">قم بتخصيص لغة التطبيق والمظهر المناسب لك.</p>
+        <button onclick="switchView('cart')" id="mob-nav-cart" class="flex flex-col items-center justify-center p-2 text-slate-400 hover:text-slate-200 text-xs font-semibold transition cursor-pointer relative">
+            <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+            <span data-i18n="nav_cart">عربة التسوق</span>
+            <span class="absolute top-1 right-3 bg-blue-600 text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center">0</span>
+        </button>
 
-        <!-- اختياري اللغة -->
-        <div class="setting-group">
-          <span class="setting-label" id="lbl-lang">لغة التطبيق</span>
-          <label class="radio-option">
-            <input type="radio" name="language" value="ar" checked>
-            <span>العربية (Arabic)</span>
-          </label>
-          <label class="radio-option">
-            <input type="radio" name="language" value="en">
-            <span>English ( الإنجليزية)</span>
-          </label>
-        </div>
+        <button onclick="switchView('chat')" id="mob-nav-chat" class="flex flex-col items-center justify-center p-2 text-slate-400 hover:text-slate-200 text-xs font-semibold transition cursor-pointer">
+            <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+            <span data-i18n="nav_chat">Chat Tapputi</span>
+        </button>
+    </nav>
 
-        <!-- اختياري الثيم -->
-        <div class="setting-group">
-          <span class="setting-label" id="lbl-theme">المظهر والثيمات</span>
-          <label class="radio-option">
-            <input type="radio" name="theme" value="royal" checked>
-            <span>Royal Blue</span>
-          </label>
-          <label class="radio-option">
-            <input type="radio" name="theme" value="slate">
-            <span>Dark Slate</span>
-          </label>
-          <label class="radio-option">
-            <input type="radio" name="theme" value="light">
-            <span>Light Mode</span>
-          </label>
-        </div>
+    <script>
+        let currentLang = 'ar';
+        let currentTheme = 'theme-royal-blue';
+        let currentView = 'categories';
 
-        <!-- إصدار التطبيق -->
-        <div class="version-row">
-          <span id="lbl-version">إصدار التطبيق</span>
-          <span class="version-val">v1.0.0</span>
-        </div>
-      </section>
+        const translations = {
+            ar: {
+                badge: "منصة تابوتي الذكية",
+                title: "مرحبًا بكم في منصة تابوتي!",
+                desc: "العناية المبنية على المشكلة والموجهة بأحدث المعايير العلمية.",
+                nav_categories: "الواجهة والأقسام",
+                nav_cart: "عربة التسوق",
+                nav_chat: "Chat Tapputi",
+                nav_about: "من نحن",
+                nav_settings: "الإعدادات",
+                sections_title: "التصنيفات العلمية والأقسام",
+                explore: "استكشف المحتوى ←",
+                empty: "القسم فارغ حالياً",
+                back: "← العودة للأقسام الرئيسية",
+                chat_title: "Chat Tapputi",
+                chat_badge: "قيد الإنشاء",
+                chat_desc: "نموذج الذكاء الاصطناعي اللغوي الخاص بمنصة تابوتي قيد التطوير والتدريب لتقديم استشارات علمية دقيقة مستقبلاً.",
+                about_title: "من نحن",
+                about_subtitle: "فريق العمل المطور لمشروع منصة تابوتي",
+                about_desc: "نعمل على تقديم منصة ذكية ومتقدمة تعتمد على مبدأ العناية الموجهة والمبنية على المشكلة لتوفير أرقى الحلول العلمية.",
+                team_title: "أعضاء الفريق:",
+                settings_title: "إعدادات التطبيق والتفضيلات",
+                settings_desc: "تحكم في مظاهر الثيمات، لغة العرض، ومعلومات الإصدار الحالي.",
+                lang_label: "لغة العرض (Language)",
+                theme_label: "مظهر الثيم (Theme)",
+                version_label: "رقم الإصدار (App Version):",
+                version_val: "v1.2.4 (2026)",
+                theme_1: "أزرق ملكي (Royal Blue)",
+                theme_2: "داكن عميق (Dark Slate)",
+                theme_3: "فاتح نقي (Light Mode)",
+                cart_title: "عربة التسوق",
+                cart_empty: "عربة التسوق فارغة حالياً.",
+                apply: "تطبيق التغييرات"
+            },
+            en: {
+                badge: "Smart Tapputi Platform",
+                title: "Welcome to Tapputi Platform!",
+                desc: "Problem-based care guided by the latest scientific standards.",
+                nav_categories: "Interface & Categories",
+                nav_cart: "Shopping Cart",
+                nav_chat: "Chat Tapputi",
+                nav_about: "About Us",
+                nav_settings: "Settings",
+                sections_title: "Scientific Categories",
+                explore: "Explore Content →",
+                empty: "Category is currently empty",
+                back: "← Back to Main Categories",
+                chat_title: "Chat Tapputi",
+                chat_badge: "Under Construction",
+                chat_desc: "Tapputi's linguistic AI model is currently under development to provide accurate scientific consultations in the future.",
+                about_title: "About Us",
+                about_subtitle: "Development team of Tapputi Platform",
+                about_desc: "We strive to provide a smart, advanced platform based on problem-oriented care to offer top scientific solutions.",
+                team_title: "Team Members:",
+                settings_title: "App Settings & Preferences",
+                settings_desc: "Control theme appearance, display language, and current version info.",
+                lang_label: "Display Language",
+                theme_label: "Theme Appearance",
+                version_label: "App Version:",
+                version_val: "v1.2.4 (2026)",
+                theme_1: "Royal Blue",
+                theme_2: "Dark Slate",
+                theme_3: "Light Mode",
+                cart_title: "Shopping Cart",
+                cart_empty: "Your shopping cart is currently empty.",
+                apply: "Apply Changes"
+            }
+        };
 
-      <!-- الأقسام والتصنيفات -->
-      <div class="welcome-hero">
-        <h2 id="lbl-hero-title">مرحبًا بكم في منصة تابوتي!</h2>
-        <p id="lbl-hero-desc">العناية المبنية على المشكلة والموجهة بأحدث المعايير العلمية.</p>
-      </div>
+        function t(key) {
+            return translations[currentLang][key] || key;
+        }
 
-      <div class="cards-grid">
-        <div class="card">
-          <h3 id="lbl-c1-t">حب الشباب والبثور</h3>
-          <p id="lbl-c1-d">تنظيم إفراز الدهون وتقليل التهابات البشرة.</p>
-          <a href="#" class="card-link" id="lbl-c1-l">استكشف المحتوى &larr;</a>
-        </div>
-        <div class="card">
-          <h3 id="lbl-c2-t">التصبغات وآثار الحبوب</h3>
-          <p id="lbl-c2-d">توحيد لون البشرة وإزالة التصبغات بالمكونات الفعالة.</p>
-          <a href="#" class="card-link" id="lbl-c2-l">استكشف المحتوى &larr;</a>
-        </div>
-        <div class="card">
-          <h3 id="lbl-c3-t">تضرر حاجز البشرة</h3>
-          <p id="lbl-c3-d">إصلاح وترطيب وحماية طبقات الجلد الحيوية.</p>
-          <a href="#" class="card-link" id="lbl-c3-l">استكشف المحتوى &larr;</a>
-        </div>
-        <div class="card">
-          <h3 id="lbl-c4-t">تساقط الشعر وفروة الرأس</h3>
-          <p id="lbl-c4-d">تحفيز بصيلات الشعر وعلاج مشاكل فروة الرأس.</p>
-          <a href="#" class="card-link" id="lbl-c4-l">استكشف المحتوى &larr;</a>
-        </div>
-      </div>
+        function updateStaticTexts() {
+            document.getElementById('badge-text').innerText = t('badge');
+            document.getElementById('welcome-title').innerText = t('title');
+            document.getElementById('welcome-desc').innerText = t('desc');
+            
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const k = el.getAttribute('data-i18n');
+                el.innerText = t(k);
+            });
 
-    </main>
-  </div>
+            const root = document.getElementById('html-root');
+            if (currentLang === 'ar') {
+                root.setAttribute('dir', 'rtl');
+                root.setAttribute('lang', 'ar');
+            } else {
+                root.setAttribute('dir', 'ltr');
+                root.setAttribute('lang', 'en');
+            }
+        }
 
-  <!-- الشريط السفلي (موبايل) -->
-  <nav class="bottom-nav">
-    <a href="#" class="nav-item active">
-      <span class="nav-icon">🏠</span>
-      <span id="nav-home">الواجهة والأقسام</span>
-    </a>
-    <a href="#" class="nav-item">
-      <span class="nav-icon">🛒</span>
-      <span id="nav-cart">عربة التسوق</span>
-      <span class="cart-badge">0</span>
-    </a>
-    <a href="#" class="nav-item">
-      <span class="nav-icon">💬</span>
-      <span id="nav-chat">Chat Tapputi</span>
-    </a>
-  </nav>
+        function switchView(viewName) {
+            currentView = viewName;
+            
+            // تحديث أزرار الشريط الجانبي للدسكتوب
+            ['categories', 'cart', 'chat', 'about', 'settings'].forEach(v => {
+                const btn = document.getElementById(`nav-${v}`);
+                if (btn) {
+                    if (v === viewName) {
+                        btn.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition bg-blue-600 text-white shadow-lg shadow-blue-600/25 cursor-pointer";
+                    } else {
+                        btn.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition text-slate-400 hover:bg-slate-800 hover:text-slate-200 cursor-pointer";
+                    }
+                }
 
-  <!-- برمجة الثيمات والترجمة السريعة الخالية من الأخطاء -->
-  <script>
-    const i18n = {
-      ar: {
-        appTitle: "منصة تابوتي",
-        settingsBtn: "الإعدادات",
-        settingsTitle: "إعدادات المنصة",
-        settingsDesc: "قم بتخصيص لغة التطبيق والمظهر المناسب لك.",
-        lang: "لغة التطبيق",
-        theme: "المظهر والثيمات",
-        version: "إصدار التطبيق",
-        home: "الواجهة والأقسام",
-        cart: "عربة التسوق",
-        chat: "Chat Tapputi",
-        heroTitle: "مرحبًا بكم في منصة تابوتي!",
-        heroDesc: "العناية المبنية على المشكلة والموجهة بأحدث المعايير العلمية.",
-        c1t: "حب الشباب والبثور", c1d: "تنظيم إفراز الدهون وتقليل التهابات البشرة.",
-        c2t: "التصبغات وآثار الحبوب", c2d: "توحيد لون البشرة وإزالة التصبغات بالمكونات الفعالة.",
-        c3t: "تضرر حاجز البشرة", c3d: "إصلاح وترطيب وحماية طبقات الجلد الحيوية.",
-        c4t: "تساقط الشعر وفروة الرأس", c4d: "تحفيز بصيلات الشعر وعلاج مشاكل فروة الرأس.",
-        link: "استكشف المحتوى ←"
-      },
-      en: {
-        appTitle: "Tapputi Platform",
-        settingsBtn: "Settings",
-        settingsTitle: "Platform Settings",
-        settingsDesc: "Customize application language and appearance.",
-        lang: "App Language",
-        theme: "Appearance & Themes",
-        version: "App Version",
-        home: "Interface & Categories",
-        cart: "Shopping Cart",
-        chat: "Chat Tapputi",
-        heroTitle: "Welcome to Tapputi Platform!",
-        heroDesc: "Problem-based care guided by the latest scientific standards.",
-        c1t: "Acne & Blemishes", c1d: "Regulating sebum production and reducing skin inflammation.",
-        c2t: "Hyperpigmentation & Scars", c2d: "Even skin tone and reduce pigmentation with active ingredients.",
-        c3t: "Damaged Skin Barrier", c3d: "Repair, hydrate, and protect vital skin layers.",
-        c4t: "Hair Loss & Scalp", c4d: "Stimulate hair follicles and treat scalp issues.",
-        link: "Explore Content →"
-      }
-    };
+                // تحديث أزرار الشريط السفلي للموبايل
+                const mobBtn = document.getElementById(`mob-nav-${v}`);
+                if (mobBtn) {
+                    if (v === viewName) {
+                        mobBtn.className = "flex flex-col items-center justify-center p-2 text-blue-500 text-xs font-semibold transition cursor-pointer";
+                    } else {
+                        mobBtn.className = "flex flex-col items-center justify-center p-2 text-slate-400 hover:text-slate-200 text-xs font-semibold transition cursor-pointer";
+                    }
+                }
+            });
 
-    function applyLanguage(lang) {
-      document.documentElement.lang = lang;
-      document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
-      
-      const t = i18n[lang];
-      document.getElementById('lbl-app-title').textContent = t.appTitle;
-      document.getElementById('lbl-settings-btn').textContent = t.settingsBtn;
-      document.getElementById('lbl-settings-title').textContent = t.settingsTitle;
-      document.getElementById('lbl-settings-desc').textContent = t.settingsDesc;
-      document.getElementById('lbl-lang').textContent = t.lang;
-      document.getElementById('lbl-theme').textContent = t.theme;
-      document.getElementById('lbl-version').textContent = t.version;
+            if (viewName === 'categories') loadCategoriesView();
+            else if (viewName === 'cart') loadCartView();
+            else if (viewName === 'chat') loadChatView();
+            else if (viewName === 'about') loadAboutView();
+            else if (viewName === 'settings') loadSettingsView();
+        }
 
-      document.getElementById('nav-home').textContent = t.home;
-      document.getElementById('nav-cart').textContent = t.cart;
-      document.getElementById('nav-chat').textContent = t.chat;
-      document.getElementById('side-home').textContent = "🏠 " + t.home;
-      document.getElementById('side-cart').textContent = "🛒 " + t.cart;
-      document.getElementById('side-chat').textContent = "💬 " + t.chat;
+        async function loadCategoriesView() {
+            const container = document.getElementById('dynamic-content');
+            container.innerHTML = `
+                <div class="flex items-center justify-between mb-6 border-b border-slate-700/50 pb-3">
+                    <h2 class="text-xl font-bold flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                        ${t('sections_title')}
+                    </h2>
+                </div>
+                <div id="categories-grid" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <p class="text-slate-400 col-span-full">Loading...</p>
+                </div>
+            `;
 
-      document.getElementById('lbl-hero-title').textContent = t.heroTitle;
-      document.getElementById('lbl-hero-desc').textContent = t.heroDesc;
+            try {
+                const response = await fetch('/api/categories');
+                const data = await response.json();
+                const grid = document.getElementById('categories-grid');
+                grid.innerHTML = '';
 
-      document.getElementById('lbl-c1-t').textContent = t.c1t; document.getElementById('lbl-c1-d').textContent = t.c1d; document.getElementById('lbl-c1-l').textContent = t.link;
-      document.getElementById('lbl-c2-t').textContent = t.c2t; document.getElementById('lbl-c2-d').textContent = t.c2d; document.getElementById('lbl-c2-l').textContent = t.link;
-      document.getElementById('lbl-c3-t').textContent = t.c3t; document.getElementById('lbl-c3-d').textContent = t.c3d; document.getElementById('lbl-c3-l').textContent = t.link;
-      document.getElementById('lbl-c4-t').textContent = t.c4t; document.getElementById('lbl-c4-d').textContent = t.c4d; document.getElementById('lbl-c4-l').textContent = t.link;
-    }
+                const categories = data.categories || [];
+                if (categories.length === 0) {
+                    grid.innerHTML = `<p class="col-span-full text-center py-8">${t('empty')}</p>`;
+                    return;
+                }
 
-    // استجابة خيارات اللغة
-    document.querySelectorAll('input[name="language"]').forEach(radio => {
-      radio.addEventListener('change', (e) => applyLanguage(e.target.value));
-    });
+                categories.forEach(cat => {
+                    const card = document.createElement('div');
+                    card.className = "card-theme p-6 rounded-2xl cursor-pointer flex flex-col justify-between group";
+                    card.onclick = () => openCategoryDetail(cat);
+                    
+                    const name = currentLang === 'ar' ? cat.name_ar : cat.name_en;
+                    const desc = currentLang === 'ar' ? cat.desc_ar : cat.desc_en;
 
-    // استجابة تغيير الثيمات
-    document.querySelectorAll('input[name="theme"]').forEach(radio => {
-      radio.addEventListener('change', (e) => {
-        document.body.className = '';
-        if (e.target.value === 'light') document.body.classList.add('theme-light');
-        if (e.target.value === 'slate') document.body.classList.add('theme-slate');
-      });
-    });
-  </script>
+                    card.innerHTML = `
+                        <div>
+                            <h3 class="text-lg font-bold mb-2 group-hover:text-blue-500 transition">${name}</h3>
+                            <p class="text-sm text-slate-400 leading-relaxed mb-4">${desc}</p>
+                        </div>
+                        <div class="flex items-center text-xs font-semibold text-blue-500">
+                            ${t('explore')}
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+            } catch (error) {
+                console.error(error);
+                document.getElementById('categories-grid').innerHTML = '<p class="text-red-400 col-span-full">Failed to connect to backend server.</p>';
+            }
+        }
+
+        function openCategoryDetail(cat) {
+            const name = currentLang === 'ar' ? cat.name_ar : cat.name_en;
+            const container = document.getElementById('dynamic-content');
+            container.innerHTML = `
+                <button onclick="switchView('categories')" class="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-slate-400 hover:text-blue-500 bg-slate-800/50 hover:bg-slate-800 px-4 py-2 rounded-xl border border-slate-700/50 transition cursor-pointer">
+                    ${t('back')}
+                </button>
+                <div class="card-theme p-8 rounded-2xl">
+                    <h2 class="text-2xl font-bold mb-2">${name}</h2>
+                    <div class="text-center py-16 border-2 border-dashed border-slate-700/60 rounded-xl bg-slate-900/20 mt-4">
+                        <p class="text-slate-400 font-medium text-base">${t('empty')}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function loadCartView() {
+            const container = document.getElementById('dynamic-content');
+            container.innerHTML = `
+                <div class="card-theme p-8 rounded-2xl max-w-xl mx-auto mt-6 text-center">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-blue-950/60 border border-blue-800/50 rounded-2xl flex items-center justify-center text-blue-400">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                    </div>
+                    <h2 class="text-2xl font-bold mb-2">${t('cart_title')}</h2>
+                    <p class="text-slate-400 text-sm mb-6">${t('cart_empty')}</p>
+                </div>
+            `;
+        }
+
+        function loadChatView() {
+            const container = document.getElementById('dynamic-content');
+            container.innerHTML = `
+                <div class="card-theme p-10 rounded-2xl text-center max-w-xl mx-auto mt-6">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-blue-950/60 border border-blue-800/50 rounded-2xl flex items-center justify-center text-blue-400">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+                    </div>
+                    <h2 class="text-2xl font-bold mb-2">${t('chat_title')}</h2>
+                    <span class="inline-block px-3 py-1 text-xs font-semibold text-amber-400 bg-amber-950/60 border border-amber-800/50 rounded-full mb-4">
+                        ${t('chat_badge')}
+                    </span>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        ${t('chat_desc')}
+                    </p>
+                </div>
+            `;
+        }
+
+        function loadAboutView() {
+            const container = document.getElementById('dynamic-content');
+            container.innerHTML = `
+                <div class="card-theme p-8 rounded-2xl max-w-2xl mx-auto mt-6">
+                    <div class="flex items-center gap-3 mb-6 pb-4 border-b border-slate-700/50">
+                        <div class="p-3 bg-blue-950/50 border border-blue-800/40 rounded-xl text-blue-400">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold">${t('about_title')}</h2>
+                            <p class="text-xs text-slate-400">${t('about_subtitle')}</p>
+                        </div>
+                    </div>
+                    
+                    <p class="text-slate-300 text-sm mb-6 leading-relaxed">
+                        ${t('about_desc')}
+                    </p>
+
+                    <h3 class="text-sm font-bold text-blue-500 mb-3 uppercase tracking-wider">${t('team_title')}</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div class="card-theme p-4 rounded-xl font-semibold flex items-center gap-3">
+                            <span class="w-2 h-2 rounded-full bg-blue-500"></span> محمد حسين ضاحي
+                        </div>
+                        <div class="card-theme p-4 rounded-xl font-semibold flex items-center gap-3">
+                            <span class="w-2 h-2 rounded-full bg-blue-500"></span> مجتبى حسنين صاحب
+                        </div>
+                        <div class="card-theme p-4 rounded-xl font-semibold flex items-center gap-3">
+                            <span class="w-2 h-2 rounded-full bg-blue-500"></span> حسن هادي كاظم
+                        </div>
+                        <div class="card-theme p-4 rounded-xl font-semibold flex items-center gap-3">
+                            <span class="w-2 h-2 rounded-full bg-blue-500"></span> حسن عبد علي خلف
+                        </div>
+                        <div class="card-theme p-4 rounded-xl font-semibold flex items-center gap-3">
+                            <span class="w-2 h-2 rounded-full bg-blue-500"></span> علي أحمد
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function loadSettingsView() {
+            const container = document.getElementById('dynamic-content');
+            container.innerHTML = `
+                <div class="card-theme p-8 rounded-2xl max-w-xl mx-auto mt-6">
+                    <h2 class="text-2xl font-bold mb-2">${t('settings_title')}</h2>
+                    <p class="text-slate-400 text-sm mb-6">${t('settings_desc')}</p>
+                    
+                    <!-- إعدادات اللغة -->
+                    <div class="mb-6 pb-6 border-b border-slate-700/50">
+                        <label class="block text-sm font-semibold mb-3 text-blue-400">${t('lang_label')}</label>
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-3 p-3 rounded-xl card-theme cursor-pointer">
+                                <input type="radio" name="lang-select" value="ar" ${currentLang === 'ar' ? 'checked' : ''} class="w-4 h-4 text-blue-600">
+                                <span class="font-semibold text-sm">العربية (Arabic)</span>
+                            </label>
+                            <label class="flex items-center gap-3 p-3 rounded-xl card-theme cursor-pointer">
+                                <input type="radio" name="lang-select" value="en" ${currentLang === 'en' ? 'checked' : ''} class="w-4 h-4 text-blue-600">
+                                <span class="font-semibold text-sm">English (الإنجليزية)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- إعدادات الثيمات -->
+                    <div class="mb-6 pb-6 border-b border-slate-700/50">
+                        <label class="block text-sm font-semibold mb-3 text-blue-400">${t('theme_label')}</label>
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-3 p-3 rounded-xl card-theme cursor-pointer">
+                                <input type="radio" name="theme-select" value="theme-royal-blue" ${currentTheme === 'theme-royal-blue' ? 'checked' : ''} class="w-4 h-4 text-blue-600">
+                                <span class="font-semibold text-sm">${t('theme_1')}</span>
+                            </label>
+                            <label class="flex items-center gap-3 p-3 rounded-xl card-theme cursor-pointer">
+                                <input type="radio" name="theme-select" value="theme-dark-slate" ${currentTheme === 'theme-dark-slate' ? 'checked' : ''} class="w-4 h-4 text-blue-600">
+                                <span class="font-semibold text-sm">${t('theme_2')}</span>
+                            </label>
+                            <label class="flex items-center gap-3 p-3 rounded-xl card-theme cursor-pointer">
+                                <input type="radio" name="theme-select" value="theme-light" ${currentTheme === 'theme-light' ? 'checked' : ''} class="w-4 h-4 text-blue-600">
+                                <span class="font-semibold text-sm">${t('theme_3')}</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- رقم الإصدار -->
+                    <div class="mb-6 flex items-center justify-between p-3 rounded-xl bg-slate-900/30 border border-slate-700/40 text-sm">
+                        <span class="text-slate-400">${t('version_label')}</span>
+                        <span class="font-bold text-blue-400">${t('version_val')}</span>
+                    </div>
+                    
+                    <button onclick="applySettings()" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition cursor-pointer shadow-lg shadow-blue-600/30">
+                        ${t('apply')}
+                    </button>
+                </div>
+            `;
+        }
+
+        function applySettings() {
+            const selectedLang = document.querySelector('input[name="lang-select"]:checked');
+            if (selectedLang) {
+                currentLang = selectedLang.value;
+            }
+
+            const selectedTheme = document.querySelector('input[name="theme-select"]:checked');
+            if (selectedTheme) {
+                currentTheme = selectedTheme.value;
+                const body = document.getElementById('body-element');
+                body.className = `min-h-screen flex flex-col md:flex-row ${currentTheme} pb-24 md:pb-0 pt-14 md:pt-0`;
+                
+                const sidebar = document.getElementById('sidebar-element');
+                if (sidebar) {
+                    if (currentTheme === 'theme-light') {
+                        sidebar.className = "hidden md:flex w-72 bg-white border-r border-slate-200 p-6 flex-col justify-between shrink-0 order-last text-slate-800";
+                    } else if (currentTheme === 'theme-dark-slate') {
+                        sidebar.className = "hidden md:flex w-72 bg-[#05070c] border-r border-slate-900 p-6 flex-col justify-between shrink-0 order-last";
+                    } else {
+                        sidebar.className = "hidden md:flex w-72 bg-slate-900 border-r border-slate-800 p-6 flex-col justify-between shrink-0 order-last";
+                    }
+                }
+            }
+
+            updateStaticTexts();
+            switchView(currentView);
+        }
+
+        updateStaticTexts();
+        loadCategoriesView();
+    </script>
 </body>
 </html>
