@@ -45,7 +45,27 @@
         .welcome-bounce { animation: bounceSlow 3s ease-in-out infinite; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col md:flex-row theme-royal-blue pb-24 md:pb-0" id="body-element">
+<body class="min-h-screen flex flex-col md:flex-row theme-royal-blue pb-24 md:pb-0 pt-14 md:pt-0" id="body-element">
+
+    <!-- 1. الهيدر العلوي الخاص بالموبايل فقط (يظهر في الهواتف ويختفي في الدسكتوب) -->
+    <header class="md:hidden fixed top-0 left-0 right-0 h-14 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 px-4 flex items-center justify-between z-50">
+        <div class="flex items-center gap-2 cursor-pointer" onclick="switchView('categories')">
+            <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center font-bold text-white text-sm shadow-md">
+                T
+            </div>
+            <span class="font-bold text-sm text-slate-100">منصة تابوتي</span>
+        </div>
+        <div class="flex items-center gap-1">
+            <!-- زر الإعدادات للموبايل -->
+            <button onclick="switchView('settings')" id="mob-top-settings" class="p-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition cursor-pointer" title="الإعدادات">
+                ⚙️
+            </button>
+            <!-- زر من نحن (علامة السؤال) للموبايل -->
+            <button onclick="switchView('about')" id="mob-top-about" class="p-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition cursor-pointer" title="من نحن">
+                ❓
+            </button>
+        </div>
+    </header>
 
     <!-- محتوى الشاشة الرئيسي -->
     <main class="flex-1 p-6 md:p-12 overflow-y-auto">
@@ -70,7 +90,7 @@
         </div>
     </main>
 
-    <!-- الشريط الجانبي الأصلي للدسكتوب (يظهر في الشاشات الكبيرة md:flex ويختفي في الموبايل) -->
+    <!-- 2. الشريط الجانبي الأصلي للدسكتوب والتابلت (يظهر في الشاشات الكبيرة md:flex ويختفي في الموبايل) -->
     <aside id="sidebar-element" class="hidden md:flex w-72 bg-slate-900 border-r border-slate-800 p-6 flex-col justify-between shrink-0 order-last">
         <div>
             <div class="flex items-center gap-3 mb-8 pb-4 border-b border-slate-800">
@@ -83,14 +103,13 @@
                 </div>
             </div>
 
-            <!-- أزرار التنقل الرئيسية للدسكتوب (مع إضافة عربة التسوق) -->
+            <!-- أزرار التنقل الرئيسية للدسكتوب -->
             <nav class="space-y-2">
                 <button onclick="switchView('categories')" id="nav-categories" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition bg-blue-600 text-white shadow-lg shadow-blue-600/25 cursor-pointer">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-16zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-16z"/></svg>
                     <span data-i18n="nav_categories">الواجهة والأقسام</span>
                 </button>
 
-                <!-- زر عربة التسوق للدسكتوب -->
                 <button onclick="switchView('cart')" id="nav-cart" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition text-slate-400 hover:bg-slate-800 hover:text-slate-200 cursor-pointer">
                     <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
                     <span data-i18n="nav_cart">عربة التسوق</span>
@@ -123,7 +142,7 @@
         </div>
     </aside>
 
-    <!-- الشريط السفلي للموبايل فقط (يظهر في الهواتف الصغرى md:hidden ويحتوي الرئيسية، العربة، والشات) -->
+    <!-- 3. الشريط السفلي للموبايل فقط (يحتوي حصراً على: الرئيسية، عربة التسوق، وشات تابوتي) -->
     <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-slate-900 border-t border-slate-800 flex justify-around items-center py-2 px-4 z-50 shadow-2xl backdrop-blur-md bg-opacity-95">
         <button onclick="switchView('categories')" id="mob-nav-categories" class="flex flex-col items-center justify-center p-2 text-blue-500 text-xs font-semibold transition cursor-pointer">
             <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
@@ -477,7 +496,7 @@
             if (selected) {
                 currentTheme = selected.value;
                 const body = document.getElementById('body-element');
-                body.className = `min-h-screen flex flex-col md:flex-row ${currentTheme}`;
+                body.className = `min-h-screen flex flex-col md:flex-row ${currentTheme} pb-24 md:pb-0 pt-14 md:pt-0`;
                 
                 const sidebar = document.getElementById('sidebar-element');
                 if (sidebar) {
